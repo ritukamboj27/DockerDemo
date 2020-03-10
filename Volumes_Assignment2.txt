@@ -1,0 +1,27 @@
+---Mount a volume containing files-----
+
+1) create a named volume test-data
+	docker volume create test-data 
+2) start a alpine container in sh and mount the test-data to /data
+	docker container run -it --name c1 -v test-data:/data alpine:latest  
+3) create files and folders in volume
+	/ # touch /data/test1.file
+	/ # mkdir /data/vol_dir
+	/ # ls -l data
+4) stop or delete the container
+	docker container rm -f c1
+5) start a nginx container in sh and mount the test-data to /var/www/html
+	docker container run -it --name c2 -v test-data:/var/www/html nginx:latest sh
+6) check the files and folders in /var/www/html directory
+	# ls -l /var/www/html
+
+all the files in test-data are available in /var/www/html 
+
+---Mount a new volume-------
+
+1) start bash shell in nginx container and mount a new anonymounous volume to /var/www/html 
+	docker container run -it --name c2 -v /var/www/html nginx:latest sh
+2) check the files and folders in /var/www/html
+        # ls -l /var/www/html
+
+there are no files available inside this folder

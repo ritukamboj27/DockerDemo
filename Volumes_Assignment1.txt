@@ -1,0 +1,13 @@
+----Multiple containers can use same volume------------
+
+1) create volume
+	docker volume create test
+2) create a container and mount the above volume to /data and execute the shell
+	docker container run -it --name c1 -v test:/data alpine:latest
+3) add a test.file to /data
+	/ # touch /data/test.file
+	/ # ls -l data
+4) start another container that use same volume and execute the shell
+	docker container run -it --name c2 -v test:/var alpine:latest
+	/ # ls -l
+	/ # ls -l var
