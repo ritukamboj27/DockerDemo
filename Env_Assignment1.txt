@@ -1,0 +1,13 @@
+1) use user-defined network instead of links
+	docker container run -d --name pg --network mynet --env-file db.env postgres:9.6.6-alpine
+	docker container run -d --network mynet --env-file app.env -p 80:9292 jfahrer/demo_web_app
+
+2) use the same env file for both containers
+	docker container run -d --name pg --env-file app.env postgres:9.6.6-alpine
+	docker container run -d --name test --link pg --env-file app.env -p 9292:9292 jfahrer/demo_web_app	
+
+3) set the env vars locally and use the -e flag
+	docker container run -d --name pg -e "POSTGRES_DB=web_app_db" -e "POSTGRES_USER=user" -e "POSTGRES_PASSWORD=secret" 
+	postgres:9.6.6-alpine
+	docker container run -d --name test --link pg -e "POSTGRES_DB=web_app_db" -e "POSTGRES_USER=user" -e "POSTGRES_PASSW
+	ORD=secret" -e "POSTGRES_HOST=pg" -p 9292:9292 jfahrer/demo_web_app
