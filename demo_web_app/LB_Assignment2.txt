@@ -1,0 +1,8 @@
+1) Setup a user defined network, all containers will connect to this network
+	docker network create mynet
+2) setup a postgres db
+	docker container run -d --name pg --network mynet --env-file db.env postgres:9.6.6-alpine
+3) start the jfahrer/demo_web_app image, with network alias'webapp' and set the connection to postgres db, create 5-10 instances. Don't forward any port in this container
+	 docker container run -d --network mynet --network-alias webapp --env-file app.env jfahrer/demo_web_app
+4) Start the load balancer. Set $PROXY_UPSTREAM to 'webapp:9292' and forward port 80 to containers port 80
+	docker container run --network mynet -e PROXY_UPSTREAM=webapp:9292 -p 80:80 ritukamboj27/lb:latest
