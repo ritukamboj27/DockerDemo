@@ -1,0 +1,29 @@
+1) Add the service defination webapp to compose file and use jfahrer/demo_web_app:latest as the image, and app.env file to set environment variables
+	vim docker-compose.yml
+
+	version: '3.3' 
+        services:          
+          webapp:
+	    image: jfahrer/demo_web_app:wait_for_pg
+	    environment:
+	      - POSTGRES_DB
+	      - POSTGRES_USER
+	      - POSTGRES_PASSWORD
+	      - POSTGRES_HOST
+	    depends_on:
+	      - pg
+	  pg:
+	    image: postgres:9.6.6-alpine
+	    environment:
+	      - POSTGRES_DB
+	      - POSTGRES_USER
+	      - POSTGRES_PASSWORD
+	    volumes:
+	      - pg-data:/var/lib/postgresql/data
+	volumes:  
+  	  pg-data:   
+2) Publish port 9292
+	vim docker-compose.yml
+3) Start the service using docker compose, first start the db then webapp
+	docker-compose up -d pg
+	docker-compose up -d
